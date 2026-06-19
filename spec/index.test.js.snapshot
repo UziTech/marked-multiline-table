@@ -1,7 +1,23 @@
-exports[`marked-extension-template > markdown not using this extension 1`] = `
-"<p>not example markdown</p>\\n"
+exports[`marked-multiline-table > continuation row at start with no base row is ignored 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
-exports[`marked-extension-template > no options 1`] = `
-"<p>example html</p>\\n"
+exports[`marked-multiline-table > multiline rows using colon delimiter 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ntd 1</td>\\n<td>td 2</td>\\n</tr>\\n<tr>\\n<td>td 3\\ntd 3</td>\\n<td>td 4\\ntd 4\\ntd 4</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > multiline with aligned columns 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">left</th>\\n<th align=\\"center\\">center</th>\\n<th align=\\"right\\">right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a\\naa</td>\\n<td align=\\"center\\">b\\nbb</td>\\n<td align=\\"right\\">c\\ncc</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > non-table markdown is unchanged 1`] = `
+"<p>not a table</p>\\n"
+`;
+
+exports[`marked-multiline-table > standard GFM table still works 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1</td>\\n<td>td 2</td>\\n</tr>\\n<tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > table without continuation rows is unchanged 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
