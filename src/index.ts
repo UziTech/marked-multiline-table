@@ -1,5 +1,7 @@
 import type { MarkedExtension, Tokens } from 'marked';
 
+const CONTINUATION_DELIMITER = ':';
+
 function splitCells(row: string, rules: { findPipe: RegExp, splitPipe: RegExp, slashPipe: RegExp }, count?: number): string[] {
   const cells = row
     .replace(rules.findPipe, (match: string, offset: number, str: string) => {
@@ -25,7 +27,16 @@ function splitCells(row: string, rules: { findPipe: RegExp, splitPipe: RegExp, s
 }
 
 function splitColonCells(row: string, count?: number): string[] {
-  const parts = row.split(':');
+  // Replace unescaped colons with a sentinel to split on, similar to how
+  // marked handles escaped pipes in regular table rows.
+  const parts = row
+    .replace(/:/g, (match: string, offset: number, str: string) => {
+      let escaped = false;
+      let curr = offset;
+      while (--curr >= 0 && str[curr] === '\\') escaped = !escaped;
+      return escaped ? ':' : ' :';
+    })
+    .split(' :');
 
   if (!parts[0].trim()) parts.shift();
   if (parts.length > 0 && !parts[parts.length - 1].trim()) parts.pop();
@@ -38,7 +49,7 @@ function splitColonCells(row: string, count?: number): string[] {
     }
   }
 
-  return parts.map(c => c.trim());
+  return parts.map(c => c.trim().replace(/\\:/g, ':'));
 }
 
 export default function(): MarkedExtension {
@@ -82,7 +93,7 @@ export default function(): MarkedExtension {
         for (const rawRow of rawRows) {
           if (!rawRow.trim()) continue;
 
-          const isContinuation = rawRow.trimStart().startsWith(':');
+          const isContinuation = rawRow.trimStart().startsWith(CONTINUATION_DELIMITER);
 
           if (isContinuation) {
             if (rows.length === 0) continue;

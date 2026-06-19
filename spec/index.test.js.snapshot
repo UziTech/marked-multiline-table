@@ -2,6 +2,10 @@ exports[`marked-multiline-table > continuation row at start with no base row is 
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > escaped colons in continuation rows are treated as literal colons 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ncell with : colon</td>\\n<td>td 2\\nmore</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > multiline rows using colon delimiter 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ntd 1</td>\\n<td>td 2</td>\\n</tr>\\n<tr>\\n<td>td 3\\ntd 3</td>\\n<td>td 4\\ntd 4\\ntd 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;

@@ -33,6 +33,12 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| a | b |\n|---|---|\n| 1 | 2 |\n'));
   });
 
+  test('escaped colons in continuation rows are treated as literal colons', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|------|------|\n| td 1 | td 2 |\n: cell with \\: colon : more :\n'));
+  });
+
   test('non-table markdown is unchanged', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
