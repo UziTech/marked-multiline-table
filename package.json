@@ -1,7 +1,7 @@
 {
-  "name": "marked-extension-template",
+  "name": "marked-multiline-table",
   "version": "0.0.0",
-  "description": "marked extension template",
+  "description": "A marked extension to support multiline tables in markdown.",
   "main": "./lib/index.esm.js",
   "module": "./lib/index.esm.js",
   "browser": "./lib/index.umd.js",
@@ -35,14 +35,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markedjs/marked-extension-template.git"
+    "url": "git+https://github.com/UziTech/marked-multiline-table.git"
   },
   "author": "Tony Brix <Tony@Brix.ninja> (https://Tony.Brix.ninja)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/markedjs/marked-extension-template/issues"
+    "url": "https://github.com/UziTech/marked-multiline-table/issues"
   },
-  "homepage": "https://github.com/markedjs/marked-extension-template#readme",
+  "homepage": "https://github.com/UziTech/marked-multiline-table#readme",
   "peerDependencies": {
     "marked": ">=18 <19"
   },

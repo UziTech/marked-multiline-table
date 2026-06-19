@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "marked-extension-template": [
+      "marked-multiline-table": [
         "./lib/index.d.ts"
       ]
     }
