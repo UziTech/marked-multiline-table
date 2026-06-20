@@ -1,9 +1,53 @@
+exports[`marked-multiline-table > blank rows in body are skipped 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n<tr>\\n<td>3</td>\\n<td>4</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > body row with fewer columns than header pads with empty cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td></td>\\n<td></td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > body row with more columns than header truncates extra cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > continuation row at start with no base row is ignored 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > continuation row with empty cells only appends non-empty 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2\\nextra</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > continuation row with fewer colon cells than header pads 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1\\nx</td>\\n<td>2</td>\\n<td>3</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > continuation row with more colon cells than header truncates extras 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1\\nx</td>\\n<td>2\\ny</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > double backslash before pipe is not an escape 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>foo \\\\\\\\</td>\\n<td>bar</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > empty body after delimiter 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n</table>\\n"
+`;
+
 exports[`marked-multiline-table > escaped colons in continuation rows are treated as literal colons 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ncell with : colon</td>\\n<td>td 2\\nmore</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > escaped pipe in body cell is treated as literal pipe 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>foo | bar</td>\\n<td>baz</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > header continuation with empty cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>h1</th>\\n<th>h2\\ncont</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > header continuation with more cells than header truncates 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a\\nx</th>\\n<th>b\\ny</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
 exports[`marked-multiline-table > multiline header cells 1`] = `
@@ -18,8 +62,16 @@ exports[`marked-multiline-table > multiline with aligned columns 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">left</th>\\n<th align=\\"center\\">center</th>\\n<th align=\\"right\\">right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a\\naa</td>\\n<td align=\\"center\\">b\\nbb</td>\\n<td align=\\"right\\">c\\ncc</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > no valid delimiter row returns false 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n</table>\\n"
+`;
+
 exports[`marked-multiline-table > non-table markdown is unchanged 1`] = `
 "<p>not a table</p>\\n"
+`;
+
+exports[`marked-multiline-table > single line input returns false and falls through 1`] = `
+"<p>| a | b |</p>\\n"
 `;
 
 exports[`marked-multiline-table > standard GFM table still works 1`] = `
