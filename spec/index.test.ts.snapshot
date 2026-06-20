@@ -10,6 +10,58 @@ exports[`marked-multiline-table > body row with more columns than header truncat
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > caption: after table 1`] = `
+"<table>\\n<caption>After Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>[After Caption]</p>\\n"
+`;
+
+exports[`marked-multiline-table > caption: before and after, first wins 1`] = `
+"<table>\\n<caption>Before Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>[After Caption]</p>\\n"
+`;
+
+exports[`marked-multiline-table > caption: before table 1`] = `
+"<table>\\n<caption>My Table Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > caption: with label 1`] = `
+"<table id=\\"my-table-id\\">\\n<caption>My Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > caption: with label, empty label uses caption 1`] = `
+"<table>\\n<caption>My Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > colspan: basic body cell spanning two columns 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > colspan: header cell spanning two columns 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th colspan=\\"2\\">Grouping</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > colspan: mixed colspan and normal cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n<th>d</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td>c</td>\\n<td>d</td>\\n</tr>\\n<tr>\\n<td>a</td>\\n<td colspan=\\"2\\">span2</td>\\n<td>d</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > colspan: spanning full row 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"3\\">full row</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > colspan: with continuation rows 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span\\nmore</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > combined: all features 1`] = `
+"<table id=\\"full-table\\">\\n<caption>Full Feature Table</caption>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n<th>H3</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td rowspan=\\"2\\">c\\nb</td>\\n</tr>\\n<tr>\\n<td>a</td>\\n<td>c</td>\\n</tr>\\n<tr>\\n<td>a</td>\\n<td>b</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > combined: caption with colspan 1`] = `
+"<table>\\n<caption>Complex Table</caption>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th colspan=\\"2\\">Grouping</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > combined: colspan and rowspan 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>A</th>\\n<th>B</th>\\n<th>C</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>R1A</td>\\n<td colspan=\\"2\\">span</td>\\n</tr>\\n<tr>\\n<td>R2A</td>\\n<td></td>\\n<td>R2C</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > continuation row at start with no base row is ignored 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;
@@ -68,6 +120,30 @@ exports[`marked-multiline-table > no valid delimiter row returns false 1`] = `
 
 exports[`marked-multiline-table > non-table markdown is unchanged 1`] = `
 "<p>not a table</p>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: basic two-row span 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">span</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: caret stripped from rendered text 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">hello\\nworld</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: multiple columns spanning 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>A</th>\\n<th>B</th>\\n<th>C</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">r1</td>\\n<td rowspan=\\"2\\">r1</td>\\n<td>r1</td>\\n</tr>\\n<tr>\\n<td>r2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: text concatenation with newline 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">top\\nbottom</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: three-row span 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"3\\">This cell\\nspans three\\nrows</td>\\n<td>Cell A</td>\\n</tr>\\n<tr>\\n<td>Cell B</td>\\n</tr>\\n<tr>\\n<td>Cell C</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan: with continuation rows 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">line1\\nline2</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
 exports[`marked-multiline-table > single line input returns false and falls through 1`] = `
