@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import { umdWrapper } from 'esbuild-plugin-umd-wrapper';
 
-function config(options) {
+function config(options: esbuild.BuildOptions) {
   return {
     sourcemap: true,
     bundle: true,
