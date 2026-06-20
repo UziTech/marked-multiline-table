@@ -245,3 +245,27 @@ exports[`marked-multiline-table > useBlockTokens parses cells as block tokens 1`
 exports[`marked-multiline-table > useBlockTokens with multiline cells 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th><p>th 1</p>\\n</th>\\n<th><p>th 2</p>\\n</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td><p>td 1\\ntd 1</p>\\n</td>\\n<td><p>td 2</p>\\n</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;
+
+exports[`marked-multiline-table > width: percentage and px 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th width=\\"50%\\">th 1</th>\\n<th width=\\"50px\\">th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"50%\\">td 1</td>\\n<td width=\\"50px\\">td 2</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > width: with alignment colons 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\" width=\\"50%\\">th 1</th>\\n<th align=\\"center\\" width=\\"50px\\">th 2</th>\\n<th align=\\"right\\" width=\\"50%\\">th 3</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td align=\\"left\\" width=\\"50%\\">td 1</td>\\n<td align=\\"center\\" width=\\"50px\\">td 2</td>\\n<td align=\\"right\\" width=\\"50%\\">td 3</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > width: with different separator characters 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th width=\\"50%\\">th 1</th>\\n<th width=\\"50px\\">th 2</th>\\n<th align=\\"center\\" width=\\"50%\\">th 3</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"50%\\">td 1</td>\\n<td width=\\"50px\\">td 2</td>\\n<td align=\\"center\\" width=\\"50%\\">td 3</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > width: with surrounding whitespace 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th width=\\"50%\\">th 1</th>\\n<th align=\\"center\\" width=\\"50px\\">th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"50%\\">td 1</td>\\n<td align=\\"center\\" width=\\"50px\\">td 2</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > width: without pipes at ends 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th width=\\"50%\\">th 1</th>\\n<th width=\\"50px\\">th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"50%\\">td 1</td>\\n<td width=\\"50px\\">td 2</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > width: without separator characters fails 1`] = `
+"<p>| th 1 | th 2 |\\n| 50% | 50px |\\n| td 1 | td 2 |</p>\\n"
+`;
