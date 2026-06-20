@@ -261,6 +261,18 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('[My Caption][]\n| a | b |\n|---|---|\n| 1 | 2 |\n'));
   });
 
+  test('no outer pipes', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('a | b\n---|---\n1 | 2\n: 3 : 4\n'));
+  });
+
+  test('no outer pipes with advanced features', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('H1 | Grouping ||\n---|---|---\na | span ||\n: a2 : span2 ||\n'));
+  });
+
   // Combined features tests
   test('combined: colspan and rowspan', (t) => {
     const marked = new Marked();

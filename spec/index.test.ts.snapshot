@@ -130,6 +130,14 @@ exports[`marked-multiline-table > multiline with aligned columns 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">left</th>\\n<th align=\\"center\\">center</th>\\n<th align=\\"right\\">right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a\\naa</td>\\n<td align=\\"center\\">b\\nbb</td>\\n<td align=\\"right\\">c\\ncc</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > no outer pipes 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1\\n3</td>\\n<td>2\\n4</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > no outer pipes with advanced features 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th colspan=\\"2\\">Grouping</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a\\na2</td>\\n<td colspan=\\"2\\">span\\nspan2 ||</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > no valid delimiter row returns false 1`] = `
 "<p>| a | b |\\n| c | d |</p>\\n"
 `;
