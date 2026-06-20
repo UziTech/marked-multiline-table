@@ -27,17 +27,19 @@ marked.use(markedMultilineTable({
 // column spanning (||), row spanning (^), and multiline cells (:)
 const markdown = `
 [Product Comparison Table][product-table]
-|       Feature |     Standard     |     Premium      |
-:          Name :       Plan       :       Plan       :
-|==============:|:----------------:|:----------------:|
-| Price         |    $9 / month    |   $29 / month    |
-| Core Features |              Included              ||
-| Multi-line    |              Supported             ||
-: Description   :          via continuation          ::
-:               :                lines               ::
-| Support Tier  |   Email Support  |    24/7 Phone    |
-|               |                 ^|      & Chat     ^|
-| Extra Add-ons |   Not Available  |     Included     |
+|                |                Plans               ||
+|       Feature ^|     Standard     |     Premium      |
+:          Name  :       Plan       :       Plan       :
+|===============:|:----------------:|:----------------:|
+|          Price |    $9 / month    |   $29 / month    |
+|  Core Features |              Included              ||
+| Other Features |                                   ^||
+|     Multi-line |              Supported             ||
+:    Description :          via continuation          ::
+:                :                lines               ::
+|   Support Tier |   Email Support  |    24/7 Phone    |
+|  Other Support |        None      |      & Chat     ^|
+|  Extra Add-ons |   Not Available  |     Included     |
 `;
 
 console.log(marked.parse(markdown));
@@ -159,3 +161,15 @@ Captions are defined by placing bracketed text `[Caption]` immediately preceding
 |----------|----------|
 | Content  | Value    |
 ```
+
+#### 4.4 Multiple Header Rows
+
+You can define multiple header rows before the separator line. Header cells have all the same features as body cells, including continuation lines, column spanning, and row spanning.
+
+```markdown
+| Grouping ||
+| Header 1 | Header 2 |
+|----------|----------|
+| Content  | Value    |
+```
+

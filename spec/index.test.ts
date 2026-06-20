@@ -8,17 +8,19 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse(`
 [Product Comparison Table][product-table]
-|       Feature |     Standard     |     Premium      |
-:          Name :       Plan       :       Plan       :
-|==============:|:----------------:|:----------------:|
-| Price         |    $9 / month    |   $29 / month    |
-| Core Features |              Included              ||
-| Multi-line    |              Supported             ||
-: Description   :          via continuation          ::
-:               :                lines               ::
-| Support Tier  |   Email Support  |    24/7 Phone    |
-|               |                 ^|      & Chat     ^|
-| Extra Add-ons |   Not Available  |     Included     |
+|                |                Plans               ||
+|       Feature ^|     Standard     |     Premium      |
+:          Name  :       Plan       :       Plan       :
+|===============:|:----------------:|:----------------:|
+|          Price |    $9 / month    |   $29 / month    |
+|  Core Features |              Included              ||
+| Other Features |                                   ^||
+|     Multi-line |              Supported             ||
+:    Description :          via continuation          ::
+:                :                lines               ::
+|   Support Tier |   Email Support  |    24/7 Phone    |
+|  Other Support |        None      |      & Chat     ^|
+|  Extra Add-ons |   Not Available  |     Included     |
 `));
   });
 
@@ -61,6 +63,18 @@ describe('marked-multiline-table', () => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('| h1 | h2 |\n: line1 h1 : line1 h2 :\n|---|---|\n| a | b |\n'));
+  });
+
+  test('multiple header rows', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| Main Header 1 | Main Header 2 |\n| Sub 1 | Sub 2 |\n|---|---|\n| a | b |\n'));
+  });
+
+  test('multiple header rows with colspans and rowspans', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| Grouping ||\n| H1 | H2 |\n|---|---|\n| a | b |\n'));
   });
 
   test('non-table markdown is unchanged', (t) => {

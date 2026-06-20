@@ -7,6 +7,7 @@ export interface MultilineTableOptions {
 interface ExtendedTableCell extends Tokens.TableCell {
   colspan: number;
   rowspan: number;
+  hasRowspanMarker?: boolean;
 }
 
 const CONTINUATION_DELIMITER = ':';
@@ -206,42 +207,27 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           }
         }
 
-        // Header row
-        const headerLine = lines.shift();
-        if (headerLine === undefined) return false;
+        // Header rows
+        const rawHeaderRows: string[] = [];
+        let delimiterLine: string | undefined;
 
-        // Header continuation rows (start with ':')
-        const headerContinuationRows: string[] = [];
-        while (
-          lines.length
-          && isContinuationRow(lines[0])
-          && !isTableDelimiterLine(lines[0])
-        ) {
-          headerContinuationRows.push(lines.shift()!);
-        }
-
-        // Delimiter line
-        const delimiterLine = lines.shift();
-        if (!delimiterLine || !isTableDelimiterLine(delimiterLine)) return false;
-
-        // Parse header cells with colspan detection
-        const rawHeaderCells = splitCells(headerLine, this.rules.other);
-        const count = rawHeaderCells.length;
-        const headerColspanInfo = splitCellsWithColspan(headerLine, this.rules.other, count);
-
-        // Build header cell text array for continuation merging
-        const headerCells = rawHeaderCells.slice();
-
-        // Apply header continuation rows
-        for (const rawRow of headerContinuationRows) {
-          const continuationCells = splitColonCells(rawRow.trim(), count);
-          for (let i = 0; i < count; i++) {
-            const text = continuationCells[i] ?? '';
-            if (text) {
-              headerCells[i] += '\n' + text;
-            }
+        while (lines.length > 0) {
+          const line = lines[0];
+          if (isTableDelimiterLine(line)) {
+            delimiterLine = lines.shift();
+            break;
           }
+          if (!hasUnescapedPipe(line) && !isContinuationRow(line)) {
+            break;
+          }
+          rawHeaderRows.push(lines.shift()!);
         }
+
+        if (!delimiterLine || rawHeaderRows.length === 0) return false;
+
+        // Count columns from the first header row
+        const firstHeaderCells = splitCells(rawHeaderRows[0], this.rules.other);
+        const count = firstHeaderCells.length;
 
         // Parse alignment from delimiter line
         let cleanDelimiter = delimiterLine.trim();
@@ -277,7 +263,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         // Check for caption after table
         let afterCaptionLinesConsumed = 0;
         {
-          const afterTableIdx = (captionLineConsumed ? 1 : 0) + 2 + headerContinuationRows.length + rawRows.length;
+          const afterTableIdx = (captionLineConsumed ? 1 : 0) + rawHeaderRows.length + 1 + rawRows.length;
           const allLines = src.split('\n');
           // Skip blank lines after the table
           let checkIdx = afterTableIdx;
@@ -297,29 +283,109 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         }
 
         // Determine if we need to handle this table (has advanced features)
-        const hasColspan = headerColspanInfo.some(c => c.colspan > 1);
         const hasContinuationRows = useBlockTokens
-          || headerContinuationRows.length > 0
+          || rawHeaderRows.some(rawRow => isContinuationRow(rawRow))
           || rawRows.some(rawRow => isContinuationRow(rawRow));
         const hasCustomSeparator = /[\.=\+]/.test(delimiterLine);
-        let hasAdvancedFeatures = hasContinuationRows || hasColspan || caption !== undefined || hasCustomSeparator;
+        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator;
 
-        // Check body rows for colspan or rowspan markers
-        if (!hasAdvancedFeatures) {
-          for (const rawRow of rawRows) {
-            if (isContinuationRow(rawRow)) continue;
-            const cells = splitCellsWithColspan(rawRow, this.rules.other, count);
-            if (cells.some(c => c.colspan > 1)) {
-              hasAdvancedFeatures = true;
-              break;
+        // Helper to build rows
+        const buildRows = (rawRowsToProcess: string[], isHeader: boolean): ExtendedTableCell[][] => {
+          const rowsOut: ExtendedTableCell[][] = [];
+          for (const rawRow of rawRowsToProcess) {
+            if (!rawRow.trim()) continue;
+            const isContinuation = rawRow.trimStart().startsWith(CONTINUATION_DELIMITER);
+            if (isContinuation) {
+              if (rowsOut.length === 0) continue;
+              const continuationCells = splitColonCells(rawRow.trim(), count);
+              const prevRow = rowsOut[rowsOut.length - 1];
+              const cellsByColumn: (ExtendedTableCell | undefined)[] = [];
+              let currentCol = 0;
+              for (const cell of prevRow) {
+                for (let c = 0; c < cell.colspan; c++) {
+                  cellsByColumn[currentCol + c] = cell;
+                }
+                currentCol += cell.colspan;
+              }
+              for (let i = 0; i < count; i++) {
+                const text = continuationCells[i] ?? '';
+                if (text) {
+                  const cell = cellsByColumn[i];
+                  if (cell) {
+                    cell.text += '\n' + text;
+                  }
+                }
+              }
+            } else {
+              const colspanCells = splitCellsWithColspan(rawRow, this.rules.other, count);
+              const row: ExtendedTableCell[] = [];
+              let colIdx = 0;
+              for (const c of colspanCells) {
+                const strippedText = extractRowspanMarker(c.text);
+                const hasRowspanMarker = strippedText !== null;
+                row.push({
+                  text: hasRowspanMarker ? strippedText : c.text,
+                  tokens: [],
+                  header: isHeader,
+                  align: align[colIdx] ?? null,
+                  colspan: c.colspan,
+                  rowspan: 1,
+                  hasRowspanMarker,
+                });
+                colIdx += c.colspan;
+              }
+              rowsOut.push(row);
             }
-            for (const c of cells) {
-              if (extractRowspanMarker(c.text) !== null) {
-                hasAdvancedFeatures = true;
-                break;
+          }
+
+          // Process rowspan markers (^)
+          for (let rowIdx = 1; rowIdx < rowsOut.length; rowIdx++) {
+            const currentRow = rowsOut[rowIdx];
+            for (let cellIdx = 0; cellIdx < currentRow.length; cellIdx++) {
+              const cell = currentRow[cellIdx];
+              if (!cell.hasRowspanMarker) continue;
+
+              // Find the target cell above (walk up past any already-spanned cells)
+              let targetRowIdx = rowIdx - 1;
+              while (targetRowIdx >= 0 && rowsOut[targetRowIdx][cellIdx]?.rowspan === 0) {
+                targetRowIdx--;
+              }
+              if (targetRowIdx < 0) continue;
+              const targetRow = rowsOut[targetRowIdx];
+              if (cellIdx >= targetRow.length) continue;
+              const targetCell = targetRow[cellIdx];
+
+              if (targetCell.colspan !== cell.colspan) continue;
+
+              if (cell.text) {
+                targetCell.text += '\n' + cell.text;
+              }
+              targetCell.rowspan += cell.rowspan;
+              cell.rowspan = 0; // Mark as spanned-into
+            }
+          }
+          return rowsOut;
+        };
+
+        // Check for colspans or rowspans to enable advanced features
+        if (!hasAdvancedFeatures) {
+          const checkRows = (rawRowsToProcess: string[]) => {
+            for (const rawRow of rawRowsToProcess) {
+              if (isContinuationRow(rawRow)) continue;
+              const cells = splitCellsWithColspan(rawRow, this.rules.other, count);
+              if (cells.some(c => c.colspan > 1)) {
+                return true;
+              }
+              for (const c of cells) {
+                if (extractRowspanMarker(c.text) !== null) {
+                  return true;
+                }
               }
             }
-            if (hasAdvancedFeatures) break;
+            return false;
+          };
+          if (checkRows(rawHeaderRows) || checkRows(rawRows)) {
+            hasAdvancedFeatures = true;
           }
         }
 
@@ -328,118 +394,17 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           return false;
         }
 
-        // Build body rows with colspan detection
-        const rows: ExtendedTableCell[][] = [];
-        for (const rawRow of rawRows) {
-          if (!rawRow.trim()) continue;
-          const isContinuation = rawRow.trimStart().startsWith(CONTINUATION_DELIMITER);
-          if (isContinuation) {
-            if (rows.length === 0) continue;
-            const continuationCells = splitColonCells(rawRow.trim(), count);
-            const prevRow = rows[rows.length - 1];
-            const cellsByColumn: (ExtendedTableCell | undefined)[] = [];
-            let currentCol = 0;
-            for (const cell of prevRow) {
-              for (let c = 0; c < cell.colspan; c++) {
-                cellsByColumn[currentCol + c] = cell;
-              }
-              currentCol += cell.colspan;
-            }
-            for (let i = 0; i < count; i++) {
-              const text = continuationCells[i] ?? '';
-              if (text) {
-                const cell = cellsByColumn[i];
-                if (cell) {
-                  cell.text += '\n' + text;
-                }
-              }
-            }
-          } else {
-            const colspanCells = splitCellsWithColspan(rawRow, this.rules.other, count);
-            const row: ExtendedTableCell[] = [];
-            let colIdx = 0;
-            for (const c of colspanCells) {
-              row.push({
-                text: c.text,
-                tokens: [],
-                header: false,
-                align: align[colIdx] ?? null,
-                colspan: c.colspan,
-                rowspan: 1,
-              });
-              colIdx += c.colspan;
-            }
-            rows.push(row);
-          }
-        }
+        const headerRowsOut = buildRows(rawHeaderRows, true);
+        const bodyRowsOut = buildRows(rawRows, false);
 
-        // Process rowspan markers (^)
-        // Phase 1: Detect and strip ^ markers from all cells
-        const rowspanFlags: boolean[][] = [];
-        for (const row of rows) {
-          const flags: boolean[] = [];
+        // Tokenize cells
+        for (const row of headerRowsOut) {
           for (const cell of row) {
-            const strippedText = extractRowspanMarker(cell.text);
-            if (strippedText !== null) {
-              cell.text = strippedText;
-              flags.push(true);
-            } else {
-              flags.push(false);
-            }
-          }
-          rowspanFlags.push(flags);
-        }
-
-        // Phase 2: Merge marked cells upward (top-down so spans accumulate)
-        for (let rowIdx = 1; rowIdx < rows.length; rowIdx++) {
-          const currentRow = rows[rowIdx];
-          for (let cellIdx = 0; cellIdx < currentRow.length; cellIdx++) {
-            if (!rowspanFlags[rowIdx][cellIdx]) continue;
-
-            const cell = currentRow[cellIdx];
-
-            // Find the target cell above (walk up past any already-spanned cells)
-            let targetRowIdx = rowIdx - 1;
-            while (targetRowIdx >= 0 && rows[targetRowIdx][cellIdx]?.rowspan === 0) {
-              targetRowIdx--;
-            }
-            if (targetRowIdx < 0) continue;
-            const targetRow = rows[targetRowIdx];
-            if (cellIdx >= targetRow.length) continue;
-            const targetCell = targetRow[cellIdx];
-
-            // Only merge if colspan matches
-            if (targetCell.colspan !== cell.colspan) continue;
-
-            // Merge content upward
-            if (cell.text) {
-              targetCell.text += '\n' + cell.text;
-            }
-            targetCell.rowspan += cell.rowspan;
-            cell.rowspan = 0; // Mark as spanned-into
+            if (cell.rowspan === 0) continue;
+            cell.tokens = tokenizeCells(this.lexer, cell.text);
           }
         }
-
-        // Build header cells with colspan
-        const header: ExtendedTableCell[] = [];
-        let colIdx = 0;
-        for (let cellIdx = 0; cellIdx < headerColspanInfo.length; cellIdx++) {
-          const info = headerColspanInfo[cellIdx];
-          // Use merged header text (with continuation rows applied)
-          const text = headerCells[colIdx] ?? '';
-          header.push({
-            text,
-            tokens: tokenizeCells(this.lexer, text),
-            header: true,
-            align: align[colIdx] ?? null,
-            colspan: info.colspan,
-            rowspan: 1,
-          });
-          colIdx += info.colspan;
-        }
-
-        // Tokenize body cells (skip spanned-into cells)
-        for (const row of rows) {
+        for (const row of bodyRowsOut) {
           for (const cell of row) {
             if (cell.rowspan === 0) continue;
             cell.tokens = tokenizeCells(this.lexer, cell.text);
@@ -447,15 +412,16 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         }
 
         const consumedLineCount = (captionLineConsumed ? 1 : 0)
-          + 2 + headerContinuationRows.length + rawRows.length + afterCaptionLinesConsumed;
+          + rawHeaderRows.length + 1 + rawRows.length + afterCaptionLinesConsumed;
         const raw = src.split('\n').slice(0, consumedLineCount).join('\n');
 
         const token = {
           type: 'table' as const,
           raw,
-          header,
+          header: headerRowsOut[0] as Tokens.TableCell[],
+          headerRows: headerRowsOut,
           align,
-          rows,
+          rows: bodyRowsOut,
           caption,
           captionLabel,
         };
@@ -465,7 +431,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
     },
     renderer: {
       table(token) {
-        const tableToken = token as Tokens.Table & { caption?: string; captionLabel?: string };
+        const tableToken = token as Tokens.Table & { caption?: string; captionLabel?: string; headerRows?: ExtendedTableCell[][] };
 
         const idAttr = tableToken.captionLabel ? ` id="${tableToken.captionLabel}"` : '';
         let output = `<table${idAttr}>\n`;
@@ -475,17 +441,25 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         }
 
         // Render header
-        output += '<thead>\n<tr>\n';
-        for (const cell of tableToken.header) {
-          const extCell = cell as ExtendedTableCell;
-          if (extCell.rowspan === 0) continue;
-          output += renderCell(extCell, this, true);
+        output += '<thead>\n';
+        const headerRows = tableToken.headerRows || [tableToken.header as ExtendedTableCell[]];
+        for (const row of headerRows) {
+          // Check if all cells in the row are spanned-into
+          const allSpanned = row.every((c: Tokens.TableCell) => (c as ExtendedTableCell).rowspan === 0);
+          if (allSpanned) continue;
+          output += '<tr>\n';
+          for (const cell of row) {
+            const extCell = cell as ExtendedTableCell;
+            if (extCell.rowspan === 0) continue;
+            output += renderCell(extCell, this, true);
+          }
+          output += '</tr>\n';
         }
-        output += '</tr>\n</thead>\n';
+        output += '</thead>\n';
 
         // Render body
         if (tableToken.rows.length > 0) {
-          output += '<tbody>';
+          output += '<tbody>\n';
           for (const row of tableToken.rows) {
             // Check if all cells in the row are spanned-into
             const allSpanned = row.every((c: Tokens.TableCell) => (c as ExtendedTableCell).rowspan === 0);
@@ -498,7 +472,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
             }
             output += '</tr>\n';
           }
-          output += '</tbody>';
+          output += '</tbody>\n';
         }
 
         output += '</table>\n';
