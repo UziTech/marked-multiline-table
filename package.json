@@ -1,6 +1,6 @@
 {
   "name": "marked-multiline-table",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "description": "A marked extension to support multiline tables in markdown.",
   "main": "./lib/index.esm.js",
   "module": "./lib/index.esm.js",
