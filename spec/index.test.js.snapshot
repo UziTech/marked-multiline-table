@@ -1,5 +1,5 @@
 exports[`marked-multiline-table > blank rows in body are skipped 1`] = `
-"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n<tr>\\n<td>3</td>\\n<td>4</td>\\n</tr>\\n</tbody></table>\\n"
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>| 3 | 4 |</p>\\n"
 `;
 
 exports[`marked-multiline-table > body row with fewer columns than header pads with empty cells 1`] = `
@@ -63,7 +63,7 @@ exports[`marked-multiline-table > multiline with aligned columns 1`] = `
 `;
 
 exports[`marked-multiline-table > no valid delimiter row returns false 1`] = `
-"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n</table>\\n"
+"<p>| a | b |\\n| c | d |</p>\\n"
 `;
 
 exports[`marked-multiline-table > non-table markdown is unchanged 1`] = `

@@ -6,6 +6,30 @@ export interface MultilineTableOptions {
 
 const CONTINUATION_DELIMITER = ':';
 
+function hasUnescapedPipe(value: string): boolean {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] !== '|') continue;
+    let escaped = false;
+    let curr = i;
+    while (--curr >= 0 && value[curr] === '\\') escaped = !escaped;
+    if (!escaped) return true;
+  }
+  return false;
+}
+
+function isContinuationRow(value: string): boolean {
+  const trimmed = value.trimStart();
+  if (!trimmed.startsWith(CONTINUATION_DELIMITER)) return false;
+  for (let i = 1; i < trimmed.length; i++) {
+    if (trimmed[i] !== CONTINUATION_DELIMITER) continue;
+    let escaped = false;
+    let curr = i;
+    while (--curr >= 0 && trimmed[curr] === '\\') escaped = !escaped;
+    if (!escaped) return true;
+  }
+  return false;
+}
+
 function splitCells(row: string, rules: { findPipe: RegExp; splitPipe: RegExp; slashPipe: RegExp }, count?: number): string[] {
   const cells = row
     .replace(rules.findPipe, (match, offset, str) => {
@@ -69,6 +93,11 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
       table(src) {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
+        const isTableDelimiterLine = (line: string): boolean => (
+          this.rules.other.tableDelimiter.test(line)
+          && /-/.test(line)
+          && /^[|:\-\t ]+$/.test(line)
+        );
 
         // Header row
         const headerLine = lines.shift();
@@ -76,13 +105,17 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
 
         // Header continuation rows (start with ':')
         const headerContinuationRows: string[] = [];
-        while (lines.length && lines[0].trimStart().startsWith(CONTINUATION_DELIMITER)) {
+        while (
+          lines.length
+          && isContinuationRow(lines[0])
+          && !isTableDelimiterLine(lines[0])
+        ) {
           headerContinuationRows.push(lines.shift()!);
         }
 
         // Delimiter line
         const delimiterLine = lines.shift();
-        if (!delimiterLine || !this.rules.other.tableDelimiter.test(delimiterLine)) return false;
+        if (!delimiterLine || !isTableDelimiterLine(delimiterLine)) return false;
 
         // Parse header cells
         const headerCells = splitCells(headerLine, this.rules.other);
@@ -116,9 +149,24 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         }
 
         // Body rows
-        const rawRows = lines.join('\n').trim()
-          ? lines.join('\n').replace(this.rules.other.tableRowBlankLine, '').split('\n')
-          : [];
+        const rawRows: string[] = [];
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          if (isContinuationRow(line)) {
+            rawRows.push(line);
+            continue;
+          }
+          if (!hasUnescapedPipe(line)) break;
+          rawRows.push(line);
+        }
+
+        const hasContinuationRows = useBlockTokens
+          || headerContinuationRows.length > 0
+          || rawRows.some(rawRow => isContinuationRow(rawRow));
+        // Let marked's default tokenizer handle standard tables when we don't need multiline handling.
+        if (!hasContinuationRows) {
+          return false;
+        }
 
         const rows: Tokens.TableCell[][] = [];
         for (const rawRow of rawRows) {
@@ -164,9 +212,12 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           }
         }
 
+        const consumedLineCount = 2 + headerContinuationRows.length + rawRows.length;
+        const raw = src.split('\n').slice(0, consumedLineCount).join('\n');
+
         return {
           type: 'table',
-          raw: src,
+          raw,
           header,
           align,
           rows,
