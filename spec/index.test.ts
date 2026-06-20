@@ -323,4 +323,3 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| H1 | H2 |\n| -- \t | -- |\n| a  | b  |\n'));
   });
 });
-
