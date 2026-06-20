@@ -171,6 +171,12 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| a | b | c | d |\n|---|---|---|---|\n| span || c | d |\n| a | span2 || d |\n'));
   });
 
+  test('colspan: aligned cells after spanning cell use starting column alignment', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| left | center | right |\n|:-----|:------:|------:|\n| span || c |\n'));
+  });
+
   // Row spanning tests
   test('rowspan: basic two-row span', (t) => {
     const marked = new Marked();

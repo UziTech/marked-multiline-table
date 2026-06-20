@@ -30,6 +30,10 @@ exports[`marked-multiline-table > caption: with label, empty label uses caption 
 "<table>\\n<caption>My Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > colspan: aligned cells after spanning cell use starting column alignment 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">left</th>\\n<th align=\\"center\\">center</th>\\n<th align=\\"right\\">right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\" colspan=\\"2\\">span</td>\\n<td align=\\"right\\">c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > colspan: basic body cell spanning two columns 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
 `;

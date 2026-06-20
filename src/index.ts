@@ -340,15 +340,17 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           } else {
             const colspanCells = splitCellsWithColspan(rawRow, this.rules.other, count);
             const row: ExtendedTableCell[] = [];
+            let colIdx = 0;
             for (const c of colspanCells) {
               row.push({
                 text: c.text,
                 tokens: [],
                 header: false,
-                align: align[row.length] ?? null,
+                align: align[colIdx] ?? null,
                 colspan: c.colspan,
                 rowspan: 1,
               });
+              colIdx += c.colspan;
             }
             rows.push(row);
           }
