@@ -237,6 +237,12 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| a | b |\n|---|---|\n| 1 | 2 |\n[After Caption]\n'));
   });
 
+  test('caption: after table with blank lines', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| a | b |\n|---|---|\n| 1 | 2 |\n\n[After Caption]\n'));
+  });
+
   test('caption: before and after, first wins', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());

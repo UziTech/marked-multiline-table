@@ -11,7 +11,11 @@ exports[`marked-multiline-table > body row with more columns than header truncat
 `;
 
 exports[`marked-multiline-table > caption: after table 1`] = `
-"<table>\\n<caption>After Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>[After Caption]</p>\\n"
+"<table>\\n<caption>After Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > caption: after table with blank lines 1`] = `
+"<table>\\n<caption>After Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
 exports[`marked-multiline-table > caption: before and after, first wins 1`] = `
