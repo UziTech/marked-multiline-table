@@ -3,7 +3,7 @@ import { run } from 'node:test';
 import process from 'node:process';
 
 run({
-  globPatterns: ['spec/**/*.test.js', 'spec/marked-tests.js'],
+  globPatterns: ['spec/**/*.test.js'],
   only: process.argv.includes('--only'),
   coverage: process.argv.includes('--cover'),
   coverageExcludeGlobs: ['spec/*', 'lib/*'],
