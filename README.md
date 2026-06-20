@@ -149,6 +149,8 @@ Denote cells that should span across the previous row by inserting a caret (`^`)
 
 Cell contents across rows will be concatenated together with a newline character `\n`. Note that cells can only span multiple rows if they have the same column span.
 
+When combining row spanning with multiline cells (via continuation lines), only the first line of the cell's multiline content must end with the rowspan marker (`^`) to count as a rowspan. If subsequent continuation lines within that cell also end with the rowspan marker (`^`), those markers are automatically removed. If the first line does not end with the marker, the cell does not count as a rowspan, and any markers on continuation lines remain intact.
+
 #### 4.3 Table Captions & Labels
 
 Captions are defined by placing bracketed text `[Caption]` immediately preceding or following the table.
