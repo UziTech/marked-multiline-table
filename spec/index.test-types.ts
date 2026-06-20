@@ -1,5 +1,6 @@
 import { Marked } from 'marked';
-import markedMultilineTable, { MultilineTableOptions } from 'marked-multiline-table';
+import markedMultilineTable from 'marked-multiline-table';
+import type { MultilineTableOptions } from 'marked-multiline-table';
 
 const marked = new Marked();
 
