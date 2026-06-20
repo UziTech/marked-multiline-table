@@ -94,7 +94,9 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          /-/.test(line) && this.rules.other.tableDelimiter.test(line)
+          this.rules.other.tableDelimiter.test(line)
+          && /-/.test(line)
+          && /^[|:\-\t ]+$/.test(line)
         );
 
         // Header row
@@ -161,6 +163,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const hasContinuationRows = useBlockTokens
           || headerContinuationRows.length > 0
           || rawRows.some(rawRow => isContinuationRow(rawRow));
+        // Let marked's default tokenizer handle standard tables when we don't need multiline handling.
         if (!hasContinuationRows) {
           return false;
         }
