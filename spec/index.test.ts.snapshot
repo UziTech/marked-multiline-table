@@ -42,6 +42,10 @@ exports[`marked-multiline-table > colspan: basic body cell spanning two columns 
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > colspan: header cell colspan alignment mapping 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\" colspan=\\"2\\">Grouping</th>\\n<th align=\\"right\\">Right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a</td>\\n<td>b</td>\\n<td align=\\"right\\">c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > colspan: header cell spanning two columns 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th colspan=\\"2\\">Grouping</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
 `;

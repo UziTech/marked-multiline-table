@@ -322,4 +322,11 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('| H1 | H2 |\n| -- \t | -- |\n| a  | b  |\n'));
   });
+
+  test('colspan: header cell colspan alignment mapping', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    // First header spans 2 columns, alignment maps to col 2 (right)
+    t.assert.snapshot(marked.parse('| Grouping || Right |\n|:---|---|---:|\n| a | b | c |\n'));
+  });
 });

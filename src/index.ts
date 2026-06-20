@@ -186,7 +186,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          line.includes('|') && /^[|:=\.\+\-\t ]+$/.test(line) && /[\-=\.\+]/.test(line)
+          line.includes('|') && /^[|:=\.\+\- ]+$/.test(line) && /[\-=\.\+]/.test(line)
         );
 
         // Check for caption before table
@@ -422,18 +422,20 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
 
         // Build header cells with colspan
         const header: ExtendedTableCell[] = [];
-        for (const info of headerColspanInfo) {
-          const idx = header.length;
+        let colIdx = 0;
+        for (let cellIdx = 0; cellIdx < headerColspanInfo.length; cellIdx++) {
+          const info = headerColspanInfo[cellIdx];
           // Use merged header text (with continuation rows applied)
-          const text = headerCells[idx] ?? '';
+          const text = headerCells[colIdx] ?? '';
           header.push({
             text,
             tokens: tokenizeCells(this.lexer, text),
             header: true,
-            align: align[idx] ?? null,
+            align: align[colIdx] ?? null,
             colspan: info.colspan,
             rowspan: 1,
           });
+          colIdx += info.colspan;
         }
 
         // Tokenize body cells (skip spanned-into cells)
