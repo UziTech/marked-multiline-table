@@ -333,18 +333,18 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
             if (rows.length === 0) continue;
             const continuationCells = splitColonCells(rawRow.trim(), count);
             const prevRow = rows[rows.length - 1];
-            const cellAtColumn: (ExtendedTableCell | undefined)[] = [];
+            const cellsByColumn: (ExtendedTableCell | undefined)[] = [];
             let currentCol = 0;
             for (const cell of prevRow) {
               for (let c = 0; c < cell.colspan; c++) {
-                cellAtColumn[currentCol + c] = cell;
+                cellsByColumn[currentCol + c] = cell;
               }
               currentCol += cell.colspan;
             }
             for (let i = 0; i < count; i++) {
               const text = continuationCells[i] ?? '';
               if (text) {
-                const cell = cellAtColumn[i];
+                const cell = cellsByColumn[i];
                 if (cell) {
                   cell.text += '\n' + text;
                 }
