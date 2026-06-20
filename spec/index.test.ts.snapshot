@@ -158,6 +158,18 @@ exports[`marked-multiline-table > non-table markdown is unchanged 1`] = `
 "<p>not a table</p>\\n"
 `;
 
+exports[`marked-multiline-table > rowspan with continuation lines: first row does NOT have marker, other lines do 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td>Top</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>Bottom\\nCont   ^</td>\\n<td>B</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan with continuation lines: first row has marker, other lines also have marker 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td rowspan=\\"2\\">Top\\nBottom\\nCont</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
+exports[`marked-multiline-table > rowspan with continuation lines: first row has marker, other lines do not 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td rowspan=\\"2\\">Top\\nBottom\\nCont</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
 exports[`marked-multiline-table > rowspan: basic two-row span 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td rowspan=\\"2\\">span</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;

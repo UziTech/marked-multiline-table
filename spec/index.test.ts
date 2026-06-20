@@ -257,6 +257,47 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| H1 | H2 |\n|---|---|\n| line1 | A |\n: line2 :   :\n| ^| B |\n'));
   });
 
+  test('rowspan with continuation lines: first row has marker, other lines also have marker', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    // Only the first line of the cell's multiline content ends with the rowspan marker to count as rowspan.
+    // If subsequent lines also have the marker, they should be removed.
+    t.assert.snapshot(marked.parse(`
+| H1      | H2 |
+|---------|----|
+| Top     | A  |
+| Bottom ^| B  |
+: Cont   ^:    :
+`));
+  });
+
+  test('rowspan with continuation lines: first row has marker, other lines do not', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    // First line of cell ends with rowspan marker (so counts as rowspan), but subsequent lines do not.
+    t.assert.snapshot(marked.parse(`
+| H1      | H2 |
+|---------|----|
+| Top     | A  |
+| Bottom ^| B  |
+: Cont    :    :
+`));
+  });
+
+  test('rowspan with continuation lines: first row does NOT have marker, other lines do', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    // Since the first line of the cell does not end with the rowspan marker, it is not a rowspan cell.
+    // The marker on the subsequent lines should NOT be removed (as it is not counted as a rowspan).
+    t.assert.snapshot(marked.parse(`
+| H1      | H2 |
+|---------|----|
+| Top     | A  |
+| Bottom  | B  |
+: Cont   ^:    :
+`));
+  });
+
   // Caption tests
   test('caption: before table', (t) => {
     const marked = new Marked();

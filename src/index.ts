@@ -7,7 +7,6 @@ export interface MultilineTableOptions {
 interface ExtendedTableCell extends Tokens.TableCell {
   colspan: number;
   rowspan: number;
-  hasRowspanMarker?: boolean;
 }
 
 const CONTINUATION_DELIMITER = ':';
@@ -146,13 +145,19 @@ function splitColonCells(row: string, count?: number): string[] {
 }
 
 /**
- * Check if a cell's text ends with the rowspan marker `^`.
- * If so, return the text without the marker; otherwise return null.
+ * Check if a cell's text ends with the rowspan marker `^` on the first line.
+ * If so, trim the marker from any line that ends with it; otherwise return null.
  */
 function extractRowspanMarker(text: string): string | null {
-  const trimmed = text.trimEnd();
-  if (trimmed.endsWith(ROWSPAN_MARKER)) {
-    return trimmed.slice(0, -1).trimEnd();
+  const lines = text.split('\n').map(line => line.trimEnd());
+  if (lines[0].endsWith(ROWSPAN_MARKER)) {
+    const trimmedLines = lines.map(line => {
+      if (line.endsWith(ROWSPAN_MARKER)) {
+        return line.slice(0, -1).trimEnd();
+      }
+      return line;
+    });
+    return trimmedLines.join('\n');
   }
   return null;
 }
@@ -321,16 +326,13 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
               const row: ExtendedTableCell[] = [];
               let colIdx = 0;
               for (const c of colspanCells) {
-                const strippedText = extractRowspanMarker(c.text);
-                const hasRowspanMarker = strippedText !== null;
                 row.push({
-                  text: hasRowspanMarker ? strippedText : c.text,
+                  text: c.text,
                   tokens: [],
                   header: isHeader,
                   align: align[colIdx] ?? null,
                   colspan: c.colspan,
                   rowspan: 1,
-                  hasRowspanMarker,
                 });
                 colIdx += c.colspan;
               }
@@ -343,7 +345,10 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
             const currentRow = rowsOut[rowIdx];
             for (let cellIdx = 0; cellIdx < currentRow.length; cellIdx++) {
               const cell = currentRow[cellIdx];
-              if (!cell.hasRowspanMarker) continue;
+              const strippedText = extractRowspanMarker(cell.text);
+              const hasRowspanMarker = strippedText !== null;
+              if (!hasRowspanMarker) continue;
+              cell.text = strippedText;
 
               // Find the target cell above (walk up past any already-spanned cells)
               let targetRowIdx = rowIdx - 1;
