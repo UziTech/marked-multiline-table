@@ -15,20 +15,29 @@ import markedMultilineTable from "marked-multiline-table";
 // or UMD script
 // <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
 // <script src="https://cdn.jsdelivr.net/npm/marked-multiline-table/lib/index.umd.js"></script>
-// const Marked = marked.Marked;
+// const { Marked } = marked;
 
+// Initialize marked and load the extension with optional settings
 const marked = new Marked();
+marked.use(markedMultilineTable({
+  useBlockTokens: true // Parses cell contents as block tokens (e.g. paragraphs, lists)
+}));
 
-marked.use(markedMultilineTable());
-
+// A markdown table showcasing captions, custom separators (=),
+// column spanning (||), row spanning (^), and multiline cells (:)
 const markdown = `
-| th 1 | th 2 |
-|------|------|
-| td 1 | td 2 |
-: td 1 :      :
-| td 3 | td 4 |
-:      : td 4 :
-: td 3 : td 4 :
+[Product Comparison Table][product-table]
+|       Feature |     Standard     |     Premium      |
+:          Name :       Plan       :       Plan       :
+|==============:|:----------------:|:----------------:|
+| Price         |    $9 / month    |   $29 / month    |
+| Core Features |              Included              ||
+| Multi-line    |              Supported             ||
+: Description   :          via continuation          ::
+:               :                lines               ::
+| Support Tier  |   Email Support  |    24/7 Phone    |
+|               |                 ^|      & Chat     ^|
+| Extra Add-ons |   Not Available  |     Included     |
 `;
 
 console.log(marked.parse(markdown));

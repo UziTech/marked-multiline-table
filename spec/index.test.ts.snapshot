@@ -1,3 +1,7 @@
+exports[`marked-multiline-table > README Usage example 1`] = `
+"<table id=\\"product-table\\">\\n<caption>Product Comparison Table</caption>\\n<thead>\\n<tr>\\n<th align=\\"right\\">Feature\\nName</th>\\n<th align=\\"center\\">Standard\\nPlan</th>\\n<th align=\\"center\\">Premium\\nPlan</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"right\\">Price</td>\\n<td align=\\"center\\">$9 / month</td>\\n<td align=\\"center\\">$29 / month</td>\\n</tr>\\n<tr>\\n<td align=\\"right\\">Core Features</td>\\n<td align=\\"center\\" colspan=\\"2\\">Included</td>\\n</tr>\\n<tr>\\n<td align=\\"right\\">Multi-line\\nDescription</td>\\n<td align=\\"center\\" colspan=\\"2\\">Supported\\nvia continuation\\nlines</td>\\n</tr>\\n<tr>\\n<td align=\\"right\\">Support Tier</td>\\n<td align=\\"center\\" rowspan=\\"2\\">Email Support</td>\\n<td align=\\"center\\" rowspan=\\"2\\">24/7 Phone\\n&amp; Chat</td>\\n</tr>\\n<tr>\\n<td align=\\"right\\"></td>\\n</tr>\\n<tr>\\n<td align=\\"right\\">Extra Add-ons</td>\\n<td align=\\"center\\">Not Available</td>\\n<td align=\\"center\\">Included</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > blank rows in body are skipped 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>| 3 | 4 |</p>\\n"
 `;

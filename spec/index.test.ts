@@ -3,6 +3,25 @@ import { Marked } from 'marked';
 import markedMultilineTable from '../src/index.ts';
 
 describe('marked-multiline-table', () => {
+  test('README Usage example', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse(`
+[Product Comparison Table][product-table]
+|       Feature |     Standard     |     Premium      |
+:          Name :       Plan       :       Plan       :
+|==============:|:----------------:|:----------------:|
+| Price         |    $9 / month    |   $29 / month    |
+| Core Features |              Included              ||
+| Multi-line    |              Supported             ||
+: Description   :          via continuation          ::
+:               :                lines               ::
+| Support Tier  |   Email Support  |    24/7 Phone    |
+|               |                 ^|      & Chat     ^|
+| Extra Add-ons |   Not Available  |     Included     |
+`));
+  });
+
   test('standard GFM table still works', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
@@ -206,9 +225,9 @@ describe('marked-multiline-table', () => {
   test('rowspan: caret stripped from rendered text', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
-    const result = marked.parse('| H1 | H2 |\n|---|---|\n| hello | A |\n| world ^| B |\n');
+    const result = marked.parse('| H1 | H2 |\n|---|---|\n| hello | A |\n| world ^| B |\n') as string;
     // The ^ should be stripped and not appear in output
-    t.assert.ok(!(result as string).includes('^'));
+    t.assert.ok(!result.includes('^'));
     t.assert.snapshot(result);
   });
 
