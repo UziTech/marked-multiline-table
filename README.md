@@ -143,8 +143,7 @@ Cell contents across rows will be concatenated together with a newline character
 Captions are defined by placing bracketed text `[Caption]` immediately preceding or following the table.
 
 - **Labeling/Anchoring:** You can append an anchor label to the caption: `[My Table Caption][table-anchor-id]`.
-- **Default Anchor:** If no separate label is defined, the caption itself serves as the anchor.
-
+- **No Default Anchor:** If no label is provided (or the label is empty), no `id` attribute is added.
 ```markdown
 [Prototype Table Caption][proto-table]
 | Header 1 | Header 2 |
