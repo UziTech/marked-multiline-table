@@ -81,3 +81,11 @@ exports[`marked-multiline-table > standard GFM table still works 1`] = `
 exports[`marked-multiline-table > table without continuation rows is unchanged 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
+
+exports[`marked-multiline-table > useBlockTokens parses cells as block tokens 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th><p>th 1</p>\\n</th>\\n<th><p>th 2</p>\\n</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td><p>td 1</p>\\n</td>\\n<td><p>td 2</p>\\n</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > useBlockTokens with multiline cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th><p>th 1</p>\\n</th>\\n<th><p>th 2</p>\\n</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td><p>td 1\\ntd 1</p>\\n</td>\\n<td><p>td 2</p>\\n</td>\\n</tr>\\n</tbody></table>\\n"
+`;

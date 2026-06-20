@@ -1,4 +1,8 @@
-import type { MarkedExtension, Tokens } from 'marked';
+import type { MarkedExtension, Token, Tokens } from 'marked';
+
+export interface MultilineTableOptions {
+  useBlockTokens?: boolean;
+}
 
 const CONTINUATION_DELIMITER = ':';
 
@@ -50,8 +54,17 @@ function splitColonCells(row: string, count?: number): string[] {
   return parts.map(c => c.trim().replace(/\\:/g, ':'));
 }
 
-export default function(): MarkedExtension {
-  return {
+export default function(options: MultilineTableOptions = {}): MarkedExtension {
+  const { useBlockTokens = false } = options;
+
+  function tokenizeCells(lexer: { inline(src: string, tokens?: Token[]): Token[]; blockTokens(src: string, tokens?: Token[]): Token[] }, text: string): Token[] {
+    if (useBlockTokens) {
+      return lexer.blockTokens(text);
+    }
+    return lexer.inline(text);
+  }
+
+  const extension: MarkedExtension = {
     tokenizer: {
       table(src) {
         const lines = src.split('\n');
@@ -139,7 +152,7 @@ export default function(): MarkedExtension {
         // Build header cells with inline tokens
         const header: Tokens.TableCell[] = headerCells.map((text, i) => ({
           text,
-          tokens: this.lexer.inline(text),
+          tokens: tokenizeCells(this.lexer, text),
           header: true,
           align: align[i] ?? null,
         }));
@@ -147,7 +160,7 @@ export default function(): MarkedExtension {
         // Tokenize body cells
         for (const row of rows) {
           for (const cell of row) {
-            cell.tokens = this.lexer.inline(cell.text);
+            cell.tokens = tokenizeCells(this.lexer, cell.text);
           }
         }
 
@@ -161,4 +174,20 @@ export default function(): MarkedExtension {
       },
     },
   };
+
+  if (useBlockTokens) {
+    extension.renderer = {
+      tablecell(token) {
+        const tag = token.header ? 'th' : 'td';
+        const startTag = token.align
+          ? `<${tag} align="${token.align}">`
+          : `<${tag}>`;
+        const endTag = `</${tag}>`;
+        const content = this.parser.parse(token.tokens);
+        return `${startTag}${content}${endTag}\n`;
+      },
+    };
+  }
+
+  return extension;
 }

@@ -127,4 +127,16 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('| a | b |\n|---|---|\n| 1 | 2 |\n\n| 3 | 4 |\n'));
   });
+
+  test('useBlockTokens parses cells as block tokens', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable({ useBlockTokens: true }));
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|------|------|\n| td 1 | td 2 |\n'));
+  });
+
+  test('useBlockTokens with multiline cells', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable({ useBlockTokens: true }));
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|------|------|\n| td 1 | td 2 |\n: td 1 :      :\n'));
+  });
 });

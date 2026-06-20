@@ -59,3 +59,9 @@ And cell 2 has:
 Hello
 World
 ```
+
+### Options
+
+| Option           | Type    | Default | Description                          |
+|------------------|---------|---------|--------------------------------------|
+| `useBlockTokens` | boolean | `false` | Process cell content as block tokens |
