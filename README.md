@@ -44,7 +44,7 @@ console.log(marked.parse(markdown));
 
 ## Specification
 
-This extension combines traditional **MultiMarkdown (MMD)** syntax with the **JustATheory (David Wheeler's 2009 RFC)** proposals.
+This extension combines traditional [**MultiMarkdown (MMD)**](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) syntax with the [**JustATheory (David Wheeler's 2009 RFC)**](https://justatheory.com/2009/02/markdown-table-rfc/) proposals.
 
 ### 1. Core Structural Syntax
 
