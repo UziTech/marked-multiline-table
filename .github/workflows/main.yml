@@ -80,31 +80,30 @@ jobs:
       - name: Build 🗜️
         run: npm run build
 
-  ############ Requires NPM_TOKEN in secrets ############
-  # Release:
-  #   permissions:
-  #     contents: write # to be able to publish a GitHub release
-  #     issues: write # to be able to comment on released issues
-  #     pull-requests: write # to be able to comment on released pull requests
-  #     id-token: write # to enable use of OIDC for trusted publishing and npm provenance
-  #     # see https://docs.npmjs.com/trusted-publishers to set up trusted publishing
-  #   needs: [Test, Types, Coverage, Lint, Build]
-  #   if: |
-  #     github.ref == 'refs/heads/main' &&
-  #     github.event.repository.fork == false
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v6
-  #     - name: Install Node
-  #       uses: actions/setup-node@v6
-  #       with:
-  #         node-version: "lts/*"
-  #     - name: Install Dependencies
-  #       run: npm ci
-  #     - name: Build 🗜️
-  #       run: npm run build
-  #     - name: Release 🎉
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       run: npx semantic-release
+  Release:
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for trusted publishing and npm provenance
+      # see https://docs.npmjs.com/trusted-publishers to set up trusted publishing
+    needs: [Test, Types, Coverage, Lint, Build]
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build 🗜️
+        run: npm run build
+      - name: Release 🎉
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
