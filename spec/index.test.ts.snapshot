@@ -19,7 +19,7 @@ exports[`marked-multiline-table > caption: after table with blank lines 1`] = `
 `;
 
 exports[`marked-multiline-table > caption: before and after, first wins 1`] = `
-"<table>\\n<caption>Before Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n<p>[After Caption]</p>\\n"
+"<table>\\n<caption>Before Caption</caption>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>1</td>\\n<td>2</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
 exports[`marked-multiline-table > caption: before table 1`] = `

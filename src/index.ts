@@ -274,10 +274,10 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           rawRows.push(line);
         }
 
-        // Check for caption after table (if none found before)
+        // Check for caption after table
         let afterCaptionLinesConsumed = 0;
-        if (!caption) {
-          const afterTableIdx = 2 + headerContinuationRows.length + rawRows.length;
+        {
+          const afterTableIdx = (captionLineConsumed ? 1 : 0) + 2 + headerContinuationRows.length + rawRows.length;
           const allLines = src.split('\n');
           // Skip blank lines after the table
           let checkIdx = afterTableIdx;
@@ -287,8 +287,10 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           if (checkIdx < allLines.length) {
             const captionResult = matchCaption(allLines[checkIdx]);
             if (captionResult) {
-              caption = captionResult.caption;
-              captionLabel = captionResult.label;
+              if (!caption) {
+                caption = captionResult.caption;
+                captionLabel = captionResult.label;
+              }
               afterCaptionLinesConsumed = (checkIdx - afterTableIdx) + 1;
             }
           }
