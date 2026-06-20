@@ -58,6 +58,10 @@ exports[`marked-multiline-table > colspan: with continuation rows 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span\\nmore</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > colspan: with continuation rows having text in subsequent columns 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n<th>c</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span\\nmore</td>\\n<td>c\\nyes</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > combined: all features 1`] = `
 "<table id=\\"full-table\\">\\n<caption>Full Feature Table</caption>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n<th>H3</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td colspan=\\"2\\">span</td>\\n<td rowspan=\\"2\\">c\\nb</td>\\n</tr>\\n<tr>\\n<td>a</td>\\n<td>c</td>\\n</tr>\\n<tr>\\n<td>a</td>\\n<td>b</td>\\n<td>c</td>\\n</tr>\\n</tbody></table>\\n"
 `;

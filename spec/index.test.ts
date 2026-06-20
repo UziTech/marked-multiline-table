@@ -165,6 +165,12 @@ describe('marked-multiline-table', () => {
     t.assert.snapshot(marked.parse('| a | b | c |\n|---|---|---|\n| span || c |\n: more  ::   :\n'));
   });
 
+  test('colspan: with continuation rows having text in subsequent columns', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| a | b | c |\n|---|---|---|\n| span || c |\n: more  :: yes :\n'));
+  });
+
   test('colspan: mixed colspan and normal cells', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
