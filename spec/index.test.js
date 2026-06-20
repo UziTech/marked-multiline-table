@@ -38,6 +38,11 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|------|------|\n| td 1 | td 2 |\n: cell with \\: colon : more :\n'));
   });
+  test('multiline header cells', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| h1 | h2 |\n: line1 h1 : line1 h2 :\n|---|---|\n| a | b |\n'));
+  });
 
   test('non-table markdown is unchanged', (t) => {
     const marked = new Marked();

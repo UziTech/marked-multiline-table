@@ -6,6 +6,10 @@ exports[`marked-multiline-table > escaped colons in continuation rows are treate
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ncell with : colon</td>\\n<td>td 2\\nmore</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > multiline header cells 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>h1\\nline1 h1</th>\\n<th>h2\\nline1 h2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
 exports[`marked-multiline-table > multiline rows using colon delimiter 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>td 1\\ntd 1</td>\\n<td>td 2</td>\\n</tr>\\n<tr>\\n<td>td 3\\ntd 3</td>\\n<td>td 4\\ntd 4\\ntd 4</td>\\n</tr>\\n</tbody></table>\\n"
 `;

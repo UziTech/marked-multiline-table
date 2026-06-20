@@ -2,9 +2,9 @@ import type { MarkedExtension, Tokens } from 'marked';
 
 const CONTINUATION_DELIMITER = ':';
 
-function splitCells(row: string, rules: { findPipe: RegExp, splitPipe: RegExp, slashPipe: RegExp }, count?: number): string[] {
+function splitCells(row: string, rules: { findPipe: RegExp; splitPipe: RegExp; slashPipe: RegExp }, count?: number): string[] {
   const cells = row
-    .replace(rules.findPipe, (match: string, offset: number, str: string) => {
+    .replace(rules.findPipe, (match, offset, str) => {
       let escaped = false;
       let curr = offset;
       while (--curr >= 0 && str[curr] === '\\') escaped = !escaped;
@@ -27,10 +27,8 @@ function splitCells(row: string, rules: { findPipe: RegExp, splitPipe: RegExp, s
 }
 
 function splitColonCells(row: string, count?: number): string[] {
-  // Replace unescaped colons with a sentinel to split on, similar to how
-  // marked handles escaped pipes in regular table rows.
   const parts = row
-    .replace(/:/g, (match: string, offset: number, str: string) => {
+    .replace(/:/g, (match, offset, str) => {
       let escaped = false;
       let curr = offset;
       while (--curr >= 0 && str[curr] === '\\') escaped = !escaped;
@@ -56,19 +54,40 @@ export default function(): MarkedExtension {
   return {
     tokenizer: {
       table(src) {
-        const result = this.rules.block.table.exec(src);
-        if (!result) return false;
+        const lines = src.split('\n');
+        if (lines.length < 2) return false;
 
-        if (!this.rules.other.tableDelimiter.test(result[2])) return false;
+        // Header row
+        const headerLine = lines.shift();
+        if (headerLine === undefined) return false;
 
-        const headerCells = splitCells(result[1], this.rules.other);
+        // Header continuation rows (start with ':')
+        const headerContinuationRows: string[] = [];
+        while (lines.length && lines[0].trimStart().startsWith(CONTINUATION_DELIMITER)) {
+          headerContinuationRows.push(lines.shift()!);
+        }
+
+        // Delimiter line
+        const delimiterLine = lines.shift();
+        if (!delimiterLine || !this.rules.other.tableDelimiter.test(delimiterLine)) return false;
+
+        // Parse header cells
+        const headerCells = splitCells(headerLine, this.rules.other);
         const count = headerCells.length;
 
-        // Parse alignment from delimiter row
-        const aligns = result[2]
-          .replace(this.rules.other.tableAlignChars, '')
-          .split('|');
+        // Apply header continuation rows
+        for (const rawRow of headerContinuationRows) {
+          const continuationCells = splitColonCells(rawRow.trim(), count);
+          for (let i = 0; i < count; i++) {
+            const text = continuationCells[i] ?? '';
+            if (text) {
+              headerCells[i] += '\n' + text;
+            }
+          }
+        }
 
+        // Parse alignment from delimiter line
+        const aligns = delimiterLine.replace(this.rules.other.tableAlignChars, '').split('|');
         const align: Array<'center' | 'left' | 'right' | null> = [];
         for (const alignStr of aligns) {
           const trimmed = alignStr.trim();
@@ -83,24 +102,19 @@ export default function(): MarkedExtension {
           }
         }
 
-        // Parse body rows
-        const rawRows = result[3]?.trim()
-          ? result[3].replace(this.rules.other.tableRowBlankLine, '').split('\n')
+        // Body rows
+        const rawRows = lines.join('\n').trim()
+          ? lines.join('\n').replace(this.rules.other.tableRowBlankLine, '').split('\n')
           : [];
 
         const rows: Tokens.TableCell[][] = [];
-
         for (const rawRow of rawRows) {
           if (!rawRow.trim()) continue;
-
           const isContinuation = rawRow.trimStart().startsWith(CONTINUATION_DELIMITER);
-
           if (isContinuation) {
             if (rows.length === 0) continue;
-
             const continuationCells = splitColonCells(rawRow.trim(), count);
             const prevRow = rows[rows.length - 1];
-
             for (let i = 0; i < count; i++) {
               const text = continuationCells[i] ?? '';
               if (text) {
@@ -110,7 +124,6 @@ export default function(): MarkedExtension {
           } else {
             const cells = splitCells(rawRow, this.rules.other, count);
             const row: Tokens.TableCell[] = [];
-
             for (let i = 0; i < count; i++) {
               row.push({
                 text: cells[i] ?? '',
@@ -119,7 +132,6 @@ export default function(): MarkedExtension {
                 align: align[i] ?? null,
               });
             }
-
             rows.push(row);
           }
         }
@@ -132,7 +144,7 @@ export default function(): MarkedExtension {
           align: align[i] ?? null,
         }));
 
-        // Build inline tokens for each body row's cells
+        // Tokenize body cells
         for (const row of rows) {
           for (const cell of row) {
             cell.tokens = this.lexer.inline(cell.text);
@@ -141,7 +153,7 @@ export default function(): MarkedExtension {
 
         return {
           type: 'table',
-          raw: result[0],
+          raw: src,
           header,
           align,
           rows,
