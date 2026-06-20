@@ -186,9 +186,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          this.rules.other.tableDelimiter.test(line)
-          && /-/.test(line)
-          && /^[|:\-\t ]+$/.test(line)
+          line.includes('|') && /^[|:=\.\+\-\t ]+$/.test(line) && /[\-=\.\+]/.test(line)
         );
 
         // Check for caption before table
@@ -246,16 +244,19 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         }
 
         // Parse alignment from delimiter line
-        const aligns = delimiterLine.replace(this.rules.other.tableAlignChars, '').split('|');
+        let cleanDelimiter = delimiterLine.trim();
+        if (cleanDelimiter.startsWith('|')) cleanDelimiter = cleanDelimiter.slice(1);
+        if (cleanDelimiter.endsWith('|')) cleanDelimiter = cleanDelimiter.slice(0, -1);
+        const aligns = cleanDelimiter.split('|');
         const align: Array<'center' | 'left' | 'right' | null> = [];
         for (const alignStr of aligns) {
           const trimmed = alignStr.trim();
-          if (this.rules.other.tableAlignRight.test(trimmed)) {
-            align.push('right');
-          } else if (this.rules.other.tableAlignCenter.test(trimmed)) {
+          if (trimmed.startsWith(':') && trimmed.endsWith(':') && trimmed.length > 1) {
             align.push('center');
-          } else if (this.rules.other.tableAlignLeft.test(trimmed)) {
+          } else if (trimmed.startsWith(':')) {
             align.push('left');
+          } else if (trimmed.endsWith(':')) {
+            align.push('right');
           } else {
             align.push(null);
           }
@@ -298,7 +299,8 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const hasContinuationRows = useBlockTokens
           || headerContinuationRows.length > 0
           || rawRows.some(rawRow => isContinuationRow(rawRow));
-        let hasAdvancedFeatures = hasContinuationRows || hasColspan || caption !== undefined;
+        const hasCustomSeparator = /[\.=\+]/.test(delimiterLine);
+        let hasAdvancedFeatures = hasContinuationRows || hasColspan || caption !== undefined || hasCustomSeparator;
 
         // Check body rows for colspan or rowspan markers
         if (!hasAdvancedFeatures) {

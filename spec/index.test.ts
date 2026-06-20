@@ -279,4 +279,48 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('[Full Feature Table][full-table]\n| H1 | H2 | H3 |\n|---|---|---|\n| span || c |\n| a | b ^| c |\n| a | b | c |\n'));
   });
+
+  // Custom separator characters tests
+  test('separators: equal signs (=)', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n|====|====|\n| a  | b  |\n'));
+  });
+
+  test('separators: dots (.)', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n|....|....|\n| a  | b  |\n'));
+  });
+
+  test('separators: plus signs (+)', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n|++++|++++|\n| a  | b  |\n'));
+  });
+
+  test('separators: mixed characters and alignment', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| Left | Center | Right |\n|:==== | :====: | ====: |\n| a    | b      | c     |\n'));
+  });
+
+  test('separators: dots with alignment', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| Left | Center | Right |\n|:.... | :....: | ....: |\n| a    | b      | c     |\n'));
+  });
+
+  test('separators: plus signs with alignment', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| Left | Center | Right |\n|:++++ | :++++: | ++++: |\n| a    | b      | c     |\n'));
+  });
+
+  test('separators: spaces and tabs in delimiter', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n| -- \t | -- |\n| a  | b  |\n'));
+  });
 });
+

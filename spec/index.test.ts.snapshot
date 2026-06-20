@@ -158,6 +158,34 @@ exports[`marked-multiline-table > rowspan: with continuation rows 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td rowspan=\\"2\\">line1\\nline2</td>\\n<td>A</td>\\n</tr>\\n<tr>\\n<td>B</td>\\n</tr>\\n</tbody></table>\\n"
 `;
 
+exports[`marked-multiline-table > separators: dots (.) 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: dots with alignment 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">Left</th>\\n<th align=\\"center\\">Center</th>\\n<th align=\\"right\\">Right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a</td>\\n<td align=\\"center\\">b</td>\\n<td align=\\"right\\">c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: equal signs (=) 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: mixed characters and alignment 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">Left</th>\\n<th align=\\"center\\">Center</th>\\n<th align=\\"right\\">Right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a</td>\\n<td align=\\"center\\">b</td>\\n<td align=\\"right\\">c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: plus signs (+) 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: plus signs with alignment 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th align=\\"left\\">Left</th>\\n<th align=\\"center\\">Center</th>\\n<th align=\\"right\\">Right</th>\\n</tr>\\n</thead>\\n<tbody><tr>\\n<td align=\\"left\\">a</td>\\n<td align=\\"center\\">b</td>\\n<td align=\\"right\\">c</td>\\n</tr>\\n</tbody></table>\\n"
+`;
+
+exports[`marked-multiline-table > separators: spaces and tabs in delimiter 1`] = `
+"<p>| H1 | H2 |\\n| -- \\t | -- |\\n| a  | b  |</p>\\n"
+`;
+
 exports[`marked-multiline-table > single line input returns false and falls through 1`] = `
 "<p>| a | b |</p>\\n"
 `;
