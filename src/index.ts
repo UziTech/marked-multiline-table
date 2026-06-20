@@ -192,7 +192,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          line.includes('|') && /^[|:=\.\+\- ]+$/.test(line) && /[\-=\.\+]/.test(line)
+          (line.includes('|') || line.includes('+')) && /^[|:=\.\+\- ]+$/.test(line) && /[\-=\.]/.test(line)
         );
 
         // Check for caption before table
@@ -236,6 +236,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
 
         // Parse alignment from delimiter line
         let cleanDelimiter = delimiterLine.trim();
+        cleanDelimiter = cleanDelimiter.replace(/\+/g, '|');
         if (cleanDelimiter.startsWith('|')) cleanDelimiter = cleanDelimiter.slice(1);
         if (cleanDelimiter.endsWith('|')) cleanDelimiter = cleanDelimiter.slice(0, -1);
         const aligns = cleanDelimiter.split('|');
@@ -291,8 +292,9 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const hasContinuationRows = useBlockTokens
           || rawHeaderRows.some(rawRow => isContinuationRow(rawRow))
           || rawRows.some(rawRow => isContinuationRow(rawRow));
-        const hasCustomSeparator = /[\.=\+]/.test(delimiterLine);
-        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator;
+        const hasCustomSeparator = /[\.=]/.test(delimiterLine);
+        const hasPlusDelimiter = delimiterLine.includes('+');
+        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator || hasPlusDelimiter;
 
         // Helper to build rows
         const buildRows = (rawRowsToProcess: string[], isHeader: boolean): ExtendedTableCell[][] => {

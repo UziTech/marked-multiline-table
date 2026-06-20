@@ -382,7 +382,13 @@ describe('marked-multiline-table', () => {
   test('separators: plus signs (+)', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
-    t.assert.snapshot(marked.parse('| H1 | H2 |\n|++++|++++|\n| a  | b  |\n'));
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n+----+----+\n| a  | b  |\n'));
+  });
+
+  test('separators: plus signs and pipe', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| H1 | H2 |\n|----+----|\n| a  | b  |\n'));
   });
 
   test('separators: mixed characters and alignment', (t) => {
@@ -400,7 +406,7 @@ describe('marked-multiline-table', () => {
   test('separators: plus signs with alignment', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
-    t.assert.snapshot(marked.parse('| Left | Center | Right |\n|:++++ | :++++: | ++++: |\n| a    | b      | c     |\n'));
+    t.assert.snapshot(marked.parse('| Left | Center | Right |\n+:---- | :----: | ----:+\n| a    | b      | c     |\n'));
   });
 
   test('separators: spaces and tabs in delimiter', (t) => {

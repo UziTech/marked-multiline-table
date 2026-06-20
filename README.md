@@ -83,6 +83,8 @@ A table consists of header rows, a separator line, and body rows. Columns are de
 
 The separator line dividing the headers from the body must consist only of the characters `|`, `-`, `=`, `:`, `.`, `+`, or spaces.
 
+- **Column Delimiters:** In the separator line, `+` and `|` can be used interchangeably as column boundaries (e.g. `+---+---+`, `|---|---|`, or mixed like `|---+---|`).
+
 #### 2.1 Explicit Alignment (MultiMarkdown / PHP Markdown Extra)
 
 Alignment is defined by placing colons (`:`) in the separator cells:
