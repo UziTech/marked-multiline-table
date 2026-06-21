@@ -93,6 +93,18 @@ Alignment is defined by placing colons (`:`) in the separator cells:
 - **Right Align:** `:` at the right (e.g., `---:`)
 - **Center Align:** `:` at both ends (e.g., `:---:`)
 
+#### 2.2 Column Widths
+
+You can specify a column's width in the separator line by including a percentage (`%`) or pixel (`px`) value surrounded by at least one separator character.
+
+```markdown
+| Header 1 |    Header 2 |
+|:---50%---|----100px---:|
+| Left 50% | Right 100px |
+```
+
+This will apply a `width` attribute to the `<th>` and `<td>` elements in that column.
+
 ### 3. Multiline Cell Continuation (JustATheory RFC)
 
 Standard markdown tables require all cell contents to reside on a single line. The JustATheory RFC introduces **continuation rows** using the colon (`:`) as a line-continuation marker (mnemonic for a broken pipe).

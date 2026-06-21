@@ -421,4 +421,41 @@ describe('marked-multiline-table', () => {
     // First header spans 2 columns, alignment maps to col 2 (right)
     t.assert.snapshot(marked.parse('| Grouping || Right |\n|:---|---|---:|\n| a | b | c |\n'));
   });
+
+  // Width parsing tests
+  test('width: percentage and px', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|-50%-|-50px-|\n| td 1 | td 2 |\n'));
+  });
+
+  test('width: with alignment colons', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 | th 3 |\n|:-50%-|:-50px-:|-50%-:|\n| td 1 | td 2 | td 3 |\n'));
+  });
+
+  test('width: with different separator characters', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 | th 3 |\n|=50%=|.50px.|:50%:\n| td 1 | td 2 | td 3 |\n'));
+  });
+
+  test('width: with surrounding whitespace', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|- 50% -|: 50px :|\n| td 1 | td 2 |\n'));
+  });
+
+  test('width: without pipes at ends', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('th 1 | th 2\n-50%-|-50px-\ntd 1 | td 2\n'));
+  });
+
+  test('width: without separator characters fails', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n| 50% | 50px |\n| td 1 | td 2 |\n'));
+  });
 });

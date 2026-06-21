@@ -7,6 +7,7 @@ export interface MultilineTableOptions {
 interface ExtendedTableCell extends Tokens.TableCell {
   colspan: number;
   rowspan: number;
+  width?: string | null;
 }
 
 const CONTINUATION_DELIMITER = ':';
@@ -192,7 +193,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          (line.includes('|') || line.includes('+')) && /^[|:=\.\+\- ]+$/.test(line) && /[\-=\.]/.test(line)
+          (line.includes('|') || line.includes('+')) && /^[|:=\.\+\- \d%px]+$/.test(line) && /[\-=\.]/.test(line)
         );
 
         // Check for caption before table
@@ -241,8 +242,17 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         if (cleanDelimiter.endsWith('|')) cleanDelimiter = cleanDelimiter.slice(0, -1);
         const aligns = cleanDelimiter.split('|');
         const align: Array<'center' | 'left' | 'right' | null> = [];
+        const width: Array<string | null> = [];
         for (const alignStr of aligns) {
           const trimmed = alignStr.trim();
+
+          let colWidth: string | null = null;
+          const widthMatch = alignStr.match(/(?:[\-=\.:]\s*)(\d+(?:%|px))(?:\s*[\-=\.:])/);
+          if (widthMatch) {
+            colWidth = widthMatch[1];
+          }
+          width.push(colWidth);
+
           if (trimmed.startsWith(':') && trimmed.endsWith(':') && trimmed.length > 1) {
             align.push('center');
           } else if (trimmed.startsWith(':')) {
@@ -294,7 +304,8 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           || rawRows.some(rawRow => isContinuationRow(rawRow));
         const hasCustomSeparator = /[\.=]/.test(delimiterLine);
         const hasPlusDelimiter = delimiterLine.includes('+');
-        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator || hasPlusDelimiter;
+        const hasWidths = width.some(w => w !== null);
+        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator || hasPlusDelimiter || hasWidths;
 
         // Helper to build rows
         const buildRows = (rawRowsToProcess: string[], isHeader: boolean): ExtendedTableCell[][] => {
@@ -333,6 +344,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
                   tokens: [],
                   header: isHeader,
                   align: align[colIdx] ?? null,
+                  width: width[colIdx] ?? null,
                   colspan: c.colspan,
                   rowspan: 1,
                 });
@@ -497,6 +509,9 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
     const attrs: string[] = [];
     if (cell.align) {
       attrs.push(` align="${cell.align}"`);
+    }
+    if (cell.width) {
+      attrs.push(` width="${cell.width}"`);
     }
     if (cell.colspan > 1) {
       attrs.push(` colspan="${cell.colspan}"`);
