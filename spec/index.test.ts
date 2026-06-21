@@ -438,7 +438,7 @@ describe('marked-multiline-table', () => {
   test('width: with different separator characters', (t) => {
     const marked = new Marked();
     marked.use(markedMultilineTable());
-    t.assert.snapshot(marked.parse('| th 1 | th 2 | th 3 |\n|=50%=|.50px.|:50%:\n| td 1 | td 2 | td 3 |\n'));
+    t.assert.snapshot(marked.parse('| th 1 | th 2 | th 3 |\n|=50%=|.50px.|:50%:|\n| td 1 | td 2 | td 3 |\n'));
   });
 
   test('width: with surrounding whitespace', (t) => {
