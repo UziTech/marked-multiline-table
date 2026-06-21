@@ -193,7 +193,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const lines = src.split('\n');
         if (lines.length < 2) return false;
         const isTableDelimiterLine = (line: string): boolean => (
-          (line.includes('|') || line.includes('+')) && /^[|:=\.\+\- \d%px]+$/.test(line) && /[\-=\.]/.test(line)
+          /[\-=\.]/.test(line) && /[|+]/.test(line)
         );
 
         // Check for caption before table
@@ -247,7 +247,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           const trimmed = alignStr.trim();
 
           let colWidth: string | null = null;
-          const widthMatch = alignStr.match(/(?:[\-=\.:]\s*)(\d+(?:%|px))(?:\s*[\-=\.:])/);
+          const widthMatch = alignStr.match(/^(?::?[\-=\.\s]*)([\d\w(][\d\w\s%\-\.\(\),\/*+]*[\d\w%\)])(?:[\-=\.\s]*:?)$/);
           if (widthMatch) {
             colWidth = widthMatch[1];
           }

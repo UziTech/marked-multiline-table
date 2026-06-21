@@ -81,7 +81,7 @@ A table consists of header rows, a separator line, and body rows. Columns are de
 
 ### 2. Header Separator Lines & Column Alignment
 
-The separator line dividing the headers from the body must consist only of the characters `|`, `-`, `=`, `:`, `.`, `+`, or spaces.
+The separator line dividing the headers from the body must consist only of the characters `|`, `-`, `=`, `:`, `.`, `+`, spaces, or a valid column width.
 
 - **Column Delimiters:** In the separator line, `+` and `|` can be used interchangeably as column boundaries (e.g. `+---+---+`, `|---|---|`, or mixed like `|---+---|`).
 
@@ -89,18 +89,18 @@ The separator line dividing the headers from the body must consist only of the c
 
 Alignment is defined by placing colons (`:`) in the separator cells:
 
-- **Left Align:** `:` at the left (e.g., `:---` or `:--:`)
+- **Left Align:** `:` at the left (e.g., `:---`)
 - **Right Align:** `:` at the right (e.g., `---:`)
 - **Center Align:** `:` at both ends (e.g., `:---:`)
 
 #### 2.2 Column Widths
 
-You can specify a column's width in the separator line by including a percentage (`%`) or pixel (`px`) value surrounded by at least one separator character.
+You can specify a column's width in the separator line by including any valid width value surrounded by at least one separator character.
 
 ```markdown
-| Header 1 |    Header 2 |
-|:---50%---|----100px---:|
-| Left 50% | Right 100px |
+| Header 1 |       Header 2    |
+|:---50%---|----min-content---:|
+| Left 50% | Right min-content |
 ```
 
 This will apply a `width` attribute to the `<th>` and `<td>` elements in that column.
@@ -171,6 +171,7 @@ Captions are defined by placing bracketed text `[Caption]` immediately preceding
 
 - **Labeling/Anchoring:** You can append an anchor label to the caption: `[My Table Caption][table-anchor-id]`.
 - **No Default Anchor:** If no label is provided (or the label is empty), no `id` attribute is added.
+
 ```markdown
 [Prototype Table Caption][proto-table]
 | Header 1 | Header 2 |
@@ -188,4 +189,3 @@ You can define multiple header rows before the separator line. Header cells have
 |----------|----------|
 | Content  | Value    |
 ```
-
