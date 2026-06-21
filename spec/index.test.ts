@@ -458,4 +458,10 @@ describe('marked-multiline-table', () => {
     marked.use(markedMultilineTable());
     t.assert.snapshot(marked.parse('| th 1 | th 2 |\n| 50% | 50px |\n| td 1 | td 2 |\n'));
   });
+
+  test('width: complex width value', (t) => {
+    const marked = new Marked();
+    marked.use(markedMultilineTable());
+    t.assert.snapshot(marked.parse('| th 1 | th 2 |\n|- min-content -|- calc(100% - 20px) -|\n| td 1 | td 2 |\n'));
+  });
 });

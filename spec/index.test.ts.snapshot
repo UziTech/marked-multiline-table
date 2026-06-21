@@ -246,6 +246,10 @@ exports[`marked-multiline-table > useBlockTokens with multiline cells 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th><p>th 1</p>\\n</th>\\n<th><p>th 2</p>\\n</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td><p>td 1\\ntd 1</p>\\n</td>\\n<td><p>td 2</p>\\n</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;
 
+exports[`marked-multiline-table > width: complex width value 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th width=\\"min-content\\">th 1</th>\\n<th width=\\"calc(100% - 20px)\\">th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"min-content\\">td 1</td>\\n<td width=\\"calc(100% - 20px)\\">td 2</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
 exports[`marked-multiline-table > width: percentage and px 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th width=\\"50%\\">th 1</th>\\n<th width=\\"50px\\">th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td width=\\"50%\\">td 1</td>\\n<td width=\\"50px\\">td 2</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;

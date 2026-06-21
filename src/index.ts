@@ -247,7 +247,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
           const trimmed = alignStr.trim();
 
           let colWidth: string | null = null;
-          const widthMatch = alignStr.match(/(?:[\-=\.:]\s*)([\d\w(][\d\w\s%\-\.\(\),\/*+]*[\d\w%\)])(?:\s*[\-=\.:])/);
+          const widthMatch = alignStr.match(/^(?::?[\-=\.\s]*)([\d\w(][\d\w\s%\-\.\(\),\/*+]*[\d\w%\)])(?:[\-=\.\s]*:?)$/);
           if (widthMatch) {
             colWidth = widthMatch[1];
           }
