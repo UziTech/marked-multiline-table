@@ -95,12 +95,12 @@ Alignment is defined by placing colons (`:`) in the separator cells:
 
 #### 2.2 Column Widths
 
-You can specify a column's width in the separator line by including a percentage (`%`) or pixel (`px`) value surrounded by at least one separator character.
+You can specify a column's width in the separator line by including any valid width value surrounded by at least one separator character.
 
 ```markdown
-| Header 1 |    Header 2 |
-|:---50%---|----100px---:|
-| Left 50% | Right 100px |
+| Header 1 |       Header 2    |
+|:---50%---|----min-content---:|
+| Left 50% | Right min-content |
 ```
 
 This will apply a `width` attribute to the `<th>` and `<td>` elements in that column.
