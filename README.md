@@ -98,7 +98,7 @@ Alignment is defined by placing colons (`:`) in the separator cells:
 You can specify a column's width in the separator line by including any valid width value surrounded by at least one separator character.
 
 ```markdown
-| Header 1 |       Header 2    |
+| Header 1 |      Header 2     |
 |:---50%---|----min-content---:|
 | Left 50% | Right min-content |
 ```
