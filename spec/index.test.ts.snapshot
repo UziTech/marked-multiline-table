@@ -142,6 +142,10 @@ exports[`marked-multiline-table > multiple header rows with colspans and rowspan
 "<table>\\n<thead>\\n<tr>\\n<th colspan=\\"2\\">Grouping</th>\\n</tr>\\n<tr>\\n<th>H1</th>\\n<th>H2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td>a</td>\\n<td>b</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;
 
+exports[`marked-multiline-table > no GFM table still works 1`] = `
+"<table>\\n<thead>\\n<tr>\\n<th>th 1</th>\\n<th>th 2</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td>td 1</td>\\n<td>td 2</td>\\n</tr>\\n<tr>\\n<td>td 3</td>\\n<td>td 4</td>\\n</tr>\\n</tbody>\\n</table>\\n"
+`;
+
 exports[`marked-multiline-table > no outer pipes 1`] = `
 "<table>\\n<thead>\\n<tr>\\n<th>a</th>\\n<th>b</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td>1\\n3</td>\\n<td>2\\n4</td>\\n</tr>\\n</tbody>\\n</table>\\n"
 `;

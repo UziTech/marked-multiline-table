@@ -136,7 +136,7 @@ Standard markdown tables require all cell contents to reside on a single line. T
 - Body Cell 2,1: `Line 3`
 - Body Cell 2,2: `Single`
 
-### 4. Advanced Layout Features
+### 4. Row and Column Spanning
 
 #### 4.1 Column Spanning (Multi-column Cells)
 
@@ -153,7 +153,7 @@ To indicate that a cell should span multiple columns, add additional pipes (`|`)
 
 Denote cells that should span across the previous row by inserting a caret (`^`) character immediately before the closing pipes:
 
-```
+```markdown
 | H1           | H2      |
 |--------------|---------|
 | This cell    | Cell A  |
@@ -165,7 +165,9 @@ Cell contents across rows will be concatenated together with a newline character
 
 When combining row spanning with multiline cells (via continuation lines), only the first line of the cell's multiline content must end with the rowspan marker (`^`) to count as a rowspan. If subsequent continuation lines within that cell also end with the rowspan marker (`^`), those markers are automatically removed. If the first line does not end with the marker, the cell does not count as a rowspan, and any markers on continuation lines remain intact.
 
-#### 4.3 Table Captions & Labels
+### 5. Table Caption and ID
+
+#### 5.1 Table Captions & Labels
 
 Captions are defined by placing bracketed text `[Caption]` immediately preceding or following the table.
 
@@ -179,12 +181,14 @@ Captions are defined by placing bracketed text `[Caption]` immediately preceding
 | Content  | Value    |
 ```
 
-#### 4.4 Multiple Header Rows
+### 6. Headers
+
+#### 6.1 Multiple Header Rows
 
 You can define multiple header rows before the separator line. Header cells have all the same features as body cells, including continuation lines, column spanning, and row spanning.
 
 ```markdown
-| Grouping ||
+| Grouping           ||
 | Header 1 | Header 2 |
 |----------|----------|
 | Content  | Value    |

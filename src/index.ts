@@ -305,7 +305,7 @@ export default function(options: MultilineTableOptions = {}): MarkedExtension {
         const hasCustomSeparator = /[\.=]/.test(delimiterLine);
         const hasPlusDelimiter = delimiterLine.includes('+');
         const hasWidths = width.some(w => w !== null);
-        let hasAdvancedFeatures = rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator || hasPlusDelimiter || hasWidths;
+        let hasAdvancedFeatures = this.options.gfm === false || rawHeaderRows.length > 1 || hasContinuationRows || caption !== undefined || hasCustomSeparator || hasPlusDelimiter || hasWidths;
 
         // Helper to build rows
         const buildRows = (rawRowsToProcess: string[], isHeader: boolean): ExtendedTableCell[][] => {
